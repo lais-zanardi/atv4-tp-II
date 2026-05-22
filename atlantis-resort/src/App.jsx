@@ -114,6 +114,8 @@ export default function AtlantisApp() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentView, setCurrentView] = useState('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [easterEggCount, setEasterEggCount] = useState(0);
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
   
   const [clients, setClients] = useState(initialClients);
   const [rooms, setRooms] = useState(initialRooms);
@@ -128,6 +130,17 @@ export default function AtlantisApp() {
   const handleNavClick = (viewId) => {
     setCurrentView(viewId);
     setIsMobileMenuOpen(false);
+  };
+
+  const handleLogoClick = () => {
+    setEasterEggCount(prev => {
+      const newCount = prev + 1;
+      if (newCount === 7) {
+        setShowEasterEgg(true);
+        return 0;
+      }
+      return newCount;
+    });
   };
 
   const [isClientModalOpen, setClientModalOpen] = useState(false);
@@ -630,14 +643,18 @@ export default function AtlantisApp() {
       )}
 
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-sky-900 text-white flex flex-col shadow-2xl transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="p-6 flex items-center justify-between md:justify-center border-b border-sky-800">
-          <div className="flex items-center">
+        <div 
+          className="p-6 flex items-center justify-between md:justify-center border-b border-sky-800 cursor-pointer hover:bg-sky-800/50 transition"
+          onClick={handleLogoClick}
+          title="Clique 7 vezes para o segredo!"
+        >
+          <div className="flex items-center pointer-events-none">
             <div className="bg-teal-500 text-white p-2 rounded-xs mr-3.5 shadow">
               <Palmtree size={22} />
             </div>
             <h1 className="text-2xl font-bold tracking-tight">Atlantis<span className='text-teal-400'>.</span></h1>
           </div>
-          <button onClick={() => setIsMobileMenuOpen(false)} className="md:hidden text-sky-200 hover:text-white">
+          <button onClick={(e) => { e.stopPropagation(); setIsMobileMenuOpen(false); }} className="md:hidden text-sky-200 hover:text-white">
             <X size={24} />
           </button>
         </div>
@@ -671,7 +688,7 @@ export default function AtlantisApp() {
                 AD
               </div>
               <div className="truncate pr-2">
-                <p className="text-sm font-semibold text-white leading-tight truncate">Laís Zanardi</p>
+                <p className="text-sm font-semibold text-white leading-tight truncate">Lais Zanardi</p>
                 <p className="text-xs text-sky-300">Administrador</p>
               </div>
             </div>
@@ -683,7 +700,7 @@ export default function AtlantisApp() {
             </button>
           </div>
           <div className="text-center text-[10px] text-sky-500 pt-1 border-t border-sky-800/40">
-            V5.0 
+            Versão 6.0 (SPA + Páginas)
           </div>
         </div>
       </aside>
@@ -706,7 +723,7 @@ export default function AtlantisApp() {
             <div className="w-8 h-8 bg-sky-200 rounded-xs flex items-center justify-center text-sky-800 font-bold border border-sky-300">
               LZ
             </div>
-            <span className="text-sm font-medium text-gray-700 hidden sm:block">Laís Zanardi</span>
+            <span className="text-sm font-medium text-gray-700 hidden sm:block">Lais Zanardi</span>
           </div>
         </header>
 
@@ -716,6 +733,19 @@ export default function AtlantisApp() {
           </div>
         </div>
       </main>
+
+      <Modal isOpen={showEasterEgg} onClose={() => setShowEasterEgg(false)} title="🐺 Aaaaauuuu!">
+        <div className="text-center space-y-3 py-4">
+          <div className="text-6xl mb-4">🐺</div>
+          <h3 className="text-2xl font-bold text-sky-900">Área Secreta Encontrada!</h3>
+          <div className="p-4 bg-sky-50 rounded-xs border border-sky-200">
+            <p className="text-lg text-sky-800 font-bold">🔵⚪ Paysandu Sport Club</p>
+            <p className="text-sm text-sky-600 mt-1">O Maior do Norte e Papão da Curuzu!</p>
+          </div>
+          <p className="text-xs text-gray-400 mt-4">Desde 1914</p>
+        </div>
+      </Modal>
+
     </div>
   );
 }
